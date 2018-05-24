@@ -5,7 +5,6 @@ import static java.util.Arrays.asList;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
 import com.mongodb.async.client.MongoClientSettings;
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
@@ -18,11 +17,9 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
-/**
- * Mongo DB configuration settings.
- */
 @Configuration
 @Slf4j
 public class MongoConfiguration {
@@ -37,7 +34,7 @@ public class MongoConfiguration {
         .build();
   }
 
-//  @Bean
+  @Bean
   public MongoCustomConversions customConversions() {
     log.debug("Configure mongo custom conversions");
     return new MongoCustomConversions(asList(new StringToClassConverter()));
@@ -76,6 +73,7 @@ public class MongoConfiguration {
     }
   }
 
+  @ReadingConverter
   private static class StringToClassConverter implements Converter<String, Class> {
 
     @Override
